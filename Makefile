@@ -7,6 +7,7 @@ APP = ./cmd/spork
 ## build: cleans and builds project
 build: clean
 	@echo "Building..."
+	@mkdir -p bin/
 	@go build -o ${BIN}/ ${APP}
 
 .PHONY: run
