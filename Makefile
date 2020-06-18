@@ -5,10 +5,12 @@ APP = ./cmd/spork
 
 .PHONY: build
 ## build: cleans and builds project
-build: clean
-	@echo "Building..."
+build: server client
+
+.PHONY: mkdir_bin
+## mkdir_bin: makes bin directory
+mkdir_bin:
 	@mkdir -p bin/
-	@go build -o ${BIN}/ ${APP}
 
 .PHONY: run
 ## run: runs project
@@ -33,3 +35,13 @@ setup:
 help:
 	@echo "Usage: \n"
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
+
+.PHONY: server
+server: clean mkdir_bin
+	@echo "Building..."
+	@go build -o ${BIN}/ ./cmd/server
+
+.PHONY: client
+client: clean mkdir_bin
+	@echo "Building..."
+	@go build -o ${BIN}/ ./cmd/client
