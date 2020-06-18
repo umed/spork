@@ -38,10 +38,10 @@ help:
 
 .PHONY: server
 server: clean mkdir_bin
-	@echo "Building..."
+	@echo "Building server..."
 	@go build -o ${BIN}/ ./cmd/server
 
 .PHONY: client
 client: clean mkdir_bin
-	@echo "Building..."
+	@echo "Building client..."
 	@go build -o ${BIN}/ ./cmd/client
