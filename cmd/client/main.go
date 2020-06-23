@@ -10,6 +10,14 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+func handleUserInput(c *websocket.Conn) {
+	for {
+		var outputMessage string
+		fmt.Scanln(&outputMessage)
+		c.WriteMessage(websocket.TextMessage, []byte(outputMessage))
+	}
+}
+
 func main() {
 	log.SetFlags(0)
 	var addr = config.ParseAddr()
@@ -20,6 +28,7 @@ func main() {
 		log.Fatal("dial:", err)
 	}
 	defer c.Close()
+	go handleUserInput(c)
 	c.WriteMessage(websocket.TextMessage, []byte("client joined"))
 	for {
 		_, message, err := c.ReadMessage()
@@ -28,8 +37,5 @@ func main() {
 			return
 		}
 		log.Printf("recv: %s", message)
-		var outputMessage string
-		fmt.Scanln(&outputMessage)
-		c.WriteMessage(websocket.TextMessage, []byte(outputMessage))
 	}
 }

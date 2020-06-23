@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"spork/cmd/config"
+	"spork/internal/model"
 
 	"github.com/gorilla/websocket"
 )
@@ -33,9 +34,6 @@ func run(upgrader *websocket.Upgrader, w http.ResponseWriter, r *http.Request) {
 func main() {
 	log.SetFlags(0)
 	var addr = config.ParseAddr()
-	var upgrader = websocket.Upgrader{} // use default options
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		run(&upgrader, w, r)
-	})
-	log.Fatal(http.ListenAndServe(*addr, nil))
+	var server = model.NewServer(addr)
+	server.Run()
 }

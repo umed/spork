@@ -1,6 +1,8 @@
 package config
 
-import "flag"
+import (
+	"flag"
+)
 
 // ParseAddr parses service address
 func ParseAddr() *string {
