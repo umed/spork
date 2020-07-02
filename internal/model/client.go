@@ -21,6 +21,8 @@ func (c *Client) Handle() {
 
 func (c *Client) read() {
 	defer c.close()
+	// c.conn.SetReadLimit(1024)
+	// c.conn.SetReadDeadline(time.Now().Add(10 * time.Second))
 	for {
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
@@ -36,7 +38,8 @@ func (c *Client) write() {
 	for {
 		select {
 		case message := <-c.send:
-			err := c.conn.WriteMessage(websocket.TextMessage, HandleMessageSpaces(message))
+			// err := c.conn.WriteMessage(websocket.TextMessage, HandleMessageSpaces(message))
+			err := c.conn.WriteMessage(websocket.TextMessage, message)
 			if err != nil {
 				log.Println("write:", err)
 				break

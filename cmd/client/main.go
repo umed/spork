@@ -1,20 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"bufio"
 	"log"
 	"net/url"
+	"os"
 
 	"spork/cmd/config"
+	"spork/internal/model"
 
 	"github.com/gorilla/websocket"
 )
 
 func handleUserInput(c *websocket.Conn) {
+	scanner := bufio.NewScanner(os.Stdin)
 	for {
-		var outputMessage string
-		fmt.Scanln(&outputMessage)
-		c.WriteMessage(websocket.TextMessage, []byte(outputMessage))
+		if scanner.Scan() {
+			outputMessage := scanner.Bytes()
+			c.WriteMessage(websocket.TextMessage, outputMessage)
+		}
 	}
 }
 
@@ -29,6 +33,7 @@ func main() {
 	}
 	defer c.Close()
 	go handleUserInput(c)
+	// c.SetReadLimit(1024)
 	c.WriteMessage(websocket.TextMessage, []byte("client joined"))
 	for {
 		_, message, err := c.ReadMessage()
@@ -36,6 +41,6 @@ func main() {
 			log.Println("read:", err)
 			return
 		}
-		log.Printf("recv: %s", message)
+		log.Printf("recv: %s", model.HandleMessageSpaces(message))
 	}
 }

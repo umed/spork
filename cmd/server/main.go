@@ -16,6 +16,7 @@ func run(upgrader *websocket.Upgrader, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer c.Close()
+	c.SetReadLimit(1024)
 	for {
 		mt, message, err := c.ReadMessage()
 		if err != nil {
